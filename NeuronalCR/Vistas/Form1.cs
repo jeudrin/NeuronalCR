@@ -25,9 +25,7 @@ namespace NeuronalCR
         public Form1()
         {
             InitializeComponent();
-            backpropagation = new Retropropagacion();
-            createNeuralNetwork();
-            createCharactersTable();
+            inicializar();
         }
 
         private void btnCargarImagen_Click(object sender, EventArgs e)
@@ -70,9 +68,7 @@ namespace NeuronalCR
 
         private void btnInicializar_Click(object sender, EventArgs e)
         {
-            backpropagation = new Retropropagacion();
-            createNeuralNetwork();
-            createCharactersTable();
+            inicializar();
 
             lblResultado.Text = "Se inicializó la aplicación";
         }
@@ -81,14 +77,19 @@ namespace NeuronalCR
         {
             try
             {
-                List<List<double>> entryData = new List<List<double>>(backpropagation.getEntries());
-                analyseData(entryData);
+                ajustarPesos();
                 lblResultado.Text = "Se ajustaron los pesos";
             }
             catch (Exception)
             {
                 lblResultado.Text = "Ingrese un valor válido";
             }
+        }
+
+        public void ajustarPesos()
+        {
+            List<List<double>> entryData = new List<List<double>>(backpropagation.getEntries());
+            analyseData(entryData);
         }
 
         private void btnRedNeuronal_Click(object sender, EventArgs e)
@@ -110,6 +111,13 @@ namespace NeuronalCR
             }
         }
 
+        public void inicializar()
+        {
+            backpropagation = new Retropropagacion();
+            createNeuralNetwork();
+            createCharactersTable();
+        }
+
         private void btnAnalisisCaracteres_Click(object sender, EventArgs e)
         {
             List<List<int>> matriz = obtenerMatriz(imagenSeleccionada);
@@ -120,12 +128,15 @@ namespace NeuronalCR
             for (int i = 0; i < letras.Count; i++)
             {
                 //Con esto actualizamos los datos de entrada para que concuerden con el caracter indicado por el usuario.
-
+                ajustarPesos();
                 List<double> x = obtenerPatrónPorCuadros2(letras[i]);
 
                 for (int j = 0; j < listaCaracteres.Length; j++)
                 {
                     String characterToAnalyse = listaCaracteres[j].ToUpper();
+                    //inicializar();
+                    ajustarPesos();
+
                     getEntryData(characterToAnalyse, x);//, true);
 
                     // Analizamos la imagen elegida por el usuario.
@@ -133,10 +144,6 @@ namespace NeuronalCR
                     double percentaje = Math.Round(backpropagation.missionStart(backpropagation.getUserEntry(), iteraciones), 2);
                     //labelPercent.Text = percentaje.ToString() + "%";
                     porcentajes[j] = percentaje;
-
-                    //createNeuralNetwork();
-                    //List<List<double>> entryData = new List<List<double>>(backpropagation.getEntries());
-                    //analyseData(entryData);
                 }
                 imprimirLetra(porcentajes);
                 porcentajes = new double[36];
