@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace NeuronalCR.Class
 {
-    public class Retropropagacion
+    public class Backpropagation
     {
         public int límiteIteraciones { set; get; }
         public double tasaDeAprendizaje { set; get; }

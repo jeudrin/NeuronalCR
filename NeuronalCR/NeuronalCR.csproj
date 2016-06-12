@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lógica\Letra.cs" />
+    <Compile Include="Lógica\SetupReNeuronal.cs" />
     <Compile Include="Vistas\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,7 +85,7 @@
     <Compile Include="Lógica\Neuronas\Neurona.cs" />
     <Compile Include="Lógica\Neuronas\NeuronaConPeso.cs" />
     <Compile Include="Lógica\Patrones\Patron.cs" />
-    <Compile Include="Lógica\Retropropagacion.cs" />
+    <Compile Include="Lógica\Backpropagation.cs" />
     <Compile Include="Lógica\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Vistas\Form1.resx">
