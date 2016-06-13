@@ -10,9 +10,11 @@ namespace NeuronalCR.Lógica
     {
         public String MatrizStr { get; set; }
 
+        public List<List<int>> Matriz { get; set; }
+
         public Letra(List<List<int>> mt)
         {
-
+            this.Matriz = mt;
             this.MatrizStr = generarMatrizString(mt);
         }
 

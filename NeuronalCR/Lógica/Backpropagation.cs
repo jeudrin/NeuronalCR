@@ -10,6 +10,8 @@ namespace NeuronalCR.Class
         public double tasaDeAprendizaje { set; get; }
         public List<Patron> patrones;
         public List<Neurona> neuronas;
+
+        public bool catcha = false;
         
         //Método que se encarga de obtener los datos de entrada hacia la red neuronal.
         public List<List<double>> getEntries()
@@ -2695,426 +2697,429 @@ namespace NeuronalCR.Class
         //Método para ajustar los pesos
         public void ajuste(int numeroEntrada, List<List<double>> datosEntrada, List<List<double>> pesosCapaOculta, 
             List<List<double>> pesosCapaSalida, double valorAjuste)
-        {            
-            //Aquí obtenemos todas las salidas de la red neuronal.
-            List<double> LSalidas = getSalidas(datosEntrada, pesosCapaOculta, pesosCapaSalida, numeroEntrada);
-            
-            //Este valorEsperado del caracter que está siendo analizado es individual para cada neurona de salida.
-            double valorEsperadoSalida1 = datosEntrada.ElementAt(numeroEntrada).ElementAt(36);
-            double valorEsperadoSalida2 = datosEntrada.ElementAt(numeroEntrada).ElementAt(37);
-            double valorEsperadoSalida3 = datosEntrada.ElementAt(numeroEntrada).ElementAt(38);
-            double valorEsperadoSalida4 = datosEntrada.ElementAt(numeroEntrada).ElementAt(39);
-            double valorEsperadoSalida5 = datosEntrada.ElementAt(numeroEntrada).ElementAt(40);
-            double valorEsperadoSalida6 = datosEntrada.ElementAt(numeroEntrada).ElementAt(41);
-
-            //8 Salidas de la capa oculta
-            double s1 = LSalidas.ElementAt(0); //Salida de la primera neurona de la capa oculta.
-            double s2 = LSalidas.ElementAt(1); 
-            double s3 = LSalidas.ElementAt(2); 
-            double s4 = LSalidas.ElementAt(3);
-            double s5 = LSalidas.ElementAt(4);
-            double s6 = LSalidas.ElementAt(5);
-            double s7 = LSalidas.ElementAt(6);
-            double s8 = LSalidas.ElementAt(7);
-
-            //6 Salidas de la capa de salida.
-            double s9 = LSalidas.ElementAt(8); //Salida de la primera neurona de la capa de salida.
-            double s10 = LSalidas.ElementAt(9);
-            double s11 = LSalidas.ElementAt(10);
-            double s12 = LSalidas.ElementAt(11);
-            double s13 = LSalidas.ElementAt(12);
-            double s14 = LSalidas.ElementAt(13);
-                        
-            //Deltas para ajustar los pesos que llegan a la capa de salida.
-            double deltaSalida1 = s9 * (1 - s9) * (valorEsperadoSalida1 - s9); 
-            double deltaSalida2 = s10 * (1 - s10) * (valorEsperadoSalida2 - s10);
-            double deltaSalida3 = s11 * (1 - s11) * (valorEsperadoSalida3 - s11);
-            double deltaSalida4 = s12 * (1 - s12) * (valorEsperadoSalida4 - s12);
-            double deltaSalida5 = s13 * (1 - s13) * (valorEsperadoSalida5 - s13);
-            double deltaSalida6 = s14 * (1 - s14) * (valorEsperadoSalida6 - s14);
-            
-            //Delta para la primera neurona de la capa oculta.
-            double deltaOculta1 = s1 * (1 - s1) * ((pesosCapaSalida.ElementAt(0).ElementAt(0) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(0) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(0) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(0) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(0) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(0) * deltaSalida6));
-            //Delta para la segunda neurona de la capa oculta.
-            double deltaOculta2 = s2 * (1 - s2) * ((pesosCapaSalida.ElementAt(0).ElementAt(1) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(1) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(1) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(1) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(1) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(1) * deltaSalida6));
-            //Delta para la tercera neurona de la capa oculta.
-            double deltaOculta3 = s3 * (1 - s3) * ((pesosCapaSalida.ElementAt(0).ElementAt(2) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(2) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(2) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(2) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(2) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(2) * deltaSalida6));
-            //Delta para la cuarta neurona de la capa oculta.
-            double deltaOculta4 = s4 * (1 - s4) * ((pesosCapaSalida.ElementAt(0).ElementAt(3) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(3) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(3) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(3) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(3) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(3) * deltaSalida6));
-            //Delta para la quinta neurona de la capa oculta.
-            double deltaOculta5 = s5 * (1 - s5) * ((pesosCapaSalida.ElementAt(0).ElementAt(4) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(4) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(4) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(4) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(4) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(4) * deltaSalida6));
-            //Delta para la sexta neurona de la capa oculta.
-            double deltaOculta6 = s6 * (1 - s6) * ((pesosCapaSalida.ElementAt(0).ElementAt(5) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(5) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(5) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(5) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(5) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(5) * deltaSalida6));
-            //Delta para la séptima neurona de la capa oculta.
-            double deltaOculta7 = s7 * (1 - s7) * ((pesosCapaSalida.ElementAt(0).ElementAt(6) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(6) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(6) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(6) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(6) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(6) * deltaSalida6));
-            //Delta para la octava neurona de la capa oculta.
-            double deltaOculta8 = s8 * (1 - s8) * ((pesosCapaSalida.ElementAt(0).ElementAt(7) * deltaSalida1) +
-                (pesosCapaSalida.ElementAt(1).ElementAt(7) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(7) * deltaSalida3) +
-                (pesosCapaSalida.ElementAt(3).ElementAt(7) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(7) * deltaSalida5) +
-                (pesosCapaSalida.ElementAt(5).ElementAt(7) * deltaSalida6));
-
-            //Ahora procedemos a hacer los ajustes de los pesos.
-            //Primero los pesos de la capa de salida.
-            for (int i = 0; i < pesosCapaSalida.Count; i++)
+        {
+            if (catcha == false)
             {
-                for (int j = 0; j < pesosCapaSalida.ElementAt(i).Count; j++)
+                //Aquí obtenemos todas las salidas de la red neuronal.
+                List<double> LSalidas = getSalidas(datosEntrada, pesosCapaOculta, pesosCapaSalida, numeroEntrada);
+
+                //Este valorEsperado del caracter que está siendo analizado es individual para cada neurona de salida.
+                double valorEsperadoSalida1 = datosEntrada.ElementAt(numeroEntrada).ElementAt(36);
+                double valorEsperadoSalida2 = datosEntrada.ElementAt(numeroEntrada).ElementAt(37);
+                double valorEsperadoSalida3 = datosEntrada.ElementAt(numeroEntrada).ElementAt(38);
+                double valorEsperadoSalida4 = datosEntrada.ElementAt(numeroEntrada).ElementAt(39);
+                double valorEsperadoSalida5 = datosEntrada.ElementAt(numeroEntrada).ElementAt(40);
+                double valorEsperadoSalida6 = datosEntrada.ElementAt(numeroEntrada).ElementAt(41);
+
+                //8 Salidas de la capa oculta
+                double s1 = LSalidas.ElementAt(0); //Salida de la primera neurona de la capa oculta.
+                double s2 = LSalidas.ElementAt(1);
+                double s3 = LSalidas.ElementAt(2);
+                double s4 = LSalidas.ElementAt(3);
+                double s5 = LSalidas.ElementAt(4);
+                double s6 = LSalidas.ElementAt(5);
+                double s7 = LSalidas.ElementAt(6);
+                double s8 = LSalidas.ElementAt(7);
+
+                //6 Salidas de la capa de salida.
+                double s9 = LSalidas.ElementAt(8); //Salida de la primera neurona de la capa de salida.
+                double s10 = LSalidas.ElementAt(9);
+                double s11 = LSalidas.ElementAt(10);
+                double s12 = LSalidas.ElementAt(11);
+                double s13 = LSalidas.ElementAt(12);
+                double s14 = LSalidas.ElementAt(13);
+
+                //Deltas para ajustar los pesos que llegan a la capa de salida.
+                double deltaSalida1 = s9 * (1 - s9) * (valorEsperadoSalida1 - s9);
+                double deltaSalida2 = s10 * (1 - s10) * (valorEsperadoSalida2 - s10);
+                double deltaSalida3 = s11 * (1 - s11) * (valorEsperadoSalida3 - s11);
+                double deltaSalida4 = s12 * (1 - s12) * (valorEsperadoSalida4 - s12);
+                double deltaSalida5 = s13 * (1 - s13) * (valorEsperadoSalida5 - s13);
+                double deltaSalida6 = s14 * (1 - s14) * (valorEsperadoSalida6 - s14);
+
+                //Delta para la primera neurona de la capa oculta.
+                double deltaOculta1 = s1 * (1 - s1) * ((pesosCapaSalida.ElementAt(0).ElementAt(0) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(0) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(0) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(0) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(0) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(0) * deltaSalida6));
+                //Delta para la segunda neurona de la capa oculta.
+                double deltaOculta2 = s2 * (1 - s2) * ((pesosCapaSalida.ElementAt(0).ElementAt(1) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(1) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(1) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(1) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(1) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(1) * deltaSalida6));
+                //Delta para la tercera neurona de la capa oculta.
+                double deltaOculta3 = s3 * (1 - s3) * ((pesosCapaSalida.ElementAt(0).ElementAt(2) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(2) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(2) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(2) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(2) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(2) * deltaSalida6));
+                //Delta para la cuarta neurona de la capa oculta.
+                double deltaOculta4 = s4 * (1 - s4) * ((pesosCapaSalida.ElementAt(0).ElementAt(3) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(3) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(3) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(3) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(3) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(3) * deltaSalida6));
+                //Delta para la quinta neurona de la capa oculta.
+                double deltaOculta5 = s5 * (1 - s5) * ((pesosCapaSalida.ElementAt(0).ElementAt(4) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(4) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(4) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(4) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(4) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(4) * deltaSalida6));
+                //Delta para la sexta neurona de la capa oculta.
+                double deltaOculta6 = s6 * (1 - s6) * ((pesosCapaSalida.ElementAt(0).ElementAt(5) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(5) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(5) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(5) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(5) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(5) * deltaSalida6));
+                //Delta para la séptima neurona de la capa oculta.
+                double deltaOculta7 = s7 * (1 - s7) * ((pesosCapaSalida.ElementAt(0).ElementAt(6) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(6) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(6) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(6) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(6) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(6) * deltaSalida6));
+                //Delta para la octava neurona de la capa oculta.
+                double deltaOculta8 = s8 * (1 - s8) * ((pesosCapaSalida.ElementAt(0).ElementAt(7) * deltaSalida1) +
+                    (pesosCapaSalida.ElementAt(1).ElementAt(7) * deltaSalida2) + (pesosCapaSalida.ElementAt(2).ElementAt(7) * deltaSalida3) +
+                    (pesosCapaSalida.ElementAt(3).ElementAt(7) * deltaSalida4) + (pesosCapaSalida.ElementAt(4).ElementAt(7) * deltaSalida5) +
+                    (pesosCapaSalida.ElementAt(5).ElementAt(7) * deltaSalida6));
+
+                //Ahora procedemos a hacer los ajustes de los pesos.
+                //Primero los pesos de la capa de salida.
+                for (int i = 0; i < pesosCapaSalida.Count; i++)
                 {
-                    if (j == 0)
+                    for (int j = 0; j < pesosCapaSalida.ElementAt(i).Count; j++)
                     {
-                        //Actualizamos los pesos salientes de la primera neurona oculta.
-                        if (i == 0)
+                        if (j == 0)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida1);
+                            //Actualizamos los pesos salientes de la primera neurona oculta.
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida6);
+                            }
                         }
-                        else if (i == 1)
+                        else if (j == 1)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida2);
+                            //Actualizamos los pesos salientes de la segunda neurona oculta.
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida6);
+                            }
                         }
-                        else if (i == 2)
+                        else if (j == 2)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida3);
+                            //Actualizamos los pesos salientes de la tercera neurona oculta.
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida6);
+                            }
                         }
-                        else if (i == 3)
+                        else if (j == 3)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida4);
+                            //Actualizamos los pesos salientes de la cuarta neurona oculta.
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida6);
+                            }
                         }
-                        else if (i == 4)
+                        else if (j == 4)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida5);
+                            //Actualizamos los pesos salientes de la quinta neurona oculta
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida6);
+                            }
                         }
-                        else if (i == 5)
+                        else if (j == 5)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s1 * deltaSalida6);
+                            //Actualizamos los pesos salientes de la sexta neurona oculta
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida6);
+                            }
                         }
-                    }
-                    else if (j == 1)
-                    {
-                        //Actualizamos los pesos salientes de la segunda neurona oculta.
-                        if (i == 0)
+                        else if (j == 6)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida1);
+                            //Actualizamos los pesos salientes de la séptima neurona oculta
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida6);
+                            }
                         }
-                        else if (i == 1)
+                        else if (j == 7)
                         {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida2);
-                        }
-                        else if (i == 2)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida3);
-                        }
-                        else if (i == 3)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida4);
-                        }
-                        else if (i == 4)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida5);
-                        }
-                        else if (i == 5)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s2 * deltaSalida6);
-                        }
-                    }
-                    else if (j == 2)
-                    {
-                        //Actualizamos los pesos salientes de la tercera neurona oculta.
-                        if (i == 0)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida1);
-                        }
-                        else if (i == 1)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida2);
-                        }
-                        else if (i == 2)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida3);
-                        }
-                        else if (i == 3)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida4);
-                        }
-                        else if (i == 4)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida5);
-                        }
-                        else if (i == 5)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s3 * deltaSalida6);
-                        }
-                    }
-                    else if (j == 3)
-                    {
-                        //Actualizamos los pesos salientes de la cuarta neurona oculta.
-                        if (i == 0)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida1);
-                        }
-                        else if (i == 1)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida2);
-                        }
-                        else if (i == 2)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida3);
-                        }
-                        else if (i == 3)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida4);
-                        }
-                        else if (i == 4)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida5);
-                        }
-                        else if (i == 5)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s4 * deltaSalida6);
-                        }
-                    }
-                    else if (j == 4)
-                    {
-                        //Actualizamos los pesos salientes de la quinta neurona oculta
-                        if (i == 0)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida1);
-                        }
-                        else if (i == 1)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida2);
-                        }
-                        else if (i == 2)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida3);
-                        }
-                        else if (i == 3)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida4);
-                        }
-                        else if (i == 4)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida5);
-                        }
-                        else if (i == 5)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s5 * deltaSalida6);
-                        }
-                    }
-                    else if (j == 5)
-                    {
-                        //Actualizamos los pesos salientes de la sexta neurona oculta
-                        if (i == 0)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida1);
-                        }
-                        else if (i == 1)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida2);
-                        }
-                        else if (i == 2)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida3);
-                        }
-                        else if (i == 3)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida4);
-                        }
-                        else if (i == 4)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida5);
-                        }
-                        else if (i == 5)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s6 * deltaSalida6);
-                        }
-                    }
-                    else if (j == 6)
-                    {
-                        //Actualizamos los pesos salientes de la séptima neurona oculta
-                        if (i == 0)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida1);
-                        }
-                        else if (i == 1)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida2);
-                        }
-                        else if (i == 2)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida3);
-                        }
-                        else if (i == 3)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida4);
-                        }
-                        else if (i == 4)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida5);
-                        }
-                        else if (i == 5)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s7 * deltaSalida6);
-                        }
-                    }
-                    else if (j == 7)
-                    {
-                        //Actualizamos los pesos salientes de la octava neurona oculta
-                        if (i == 0)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida1);
-                        }
-                        else if (i == 1)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida2);
-                        }
-                        else if (i == 2)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida3);
-                        }
-                        else if (i == 3)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida4);
-                        }
-                        else if (i == 4)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida5);
-                        }
-                        else if (i == 5)
-                        {
-                            this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
-                                pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida6);
+                            //Actualizamos los pesos salientes de la octava neurona oculta
+                            if (i == 0)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida1);
+                            }
+                            else if (i == 1)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida2);
+                            }
+                            else if (i == 2)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida3);
+                            }
+                            else if (i == 3)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida4);
+                            }
+                            else if (i == 4)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida5);
+                            }
+                            else if (i == 5)
+                            {
+                                this.neuronas.ElementAt(i + (this.neuronas.Count - 6)).neuronasDeLlegada.ElementAt(j).peso =
+                                    pesosCapaSalida.ElementAt(i).ElementAt(j) + (valorAjuste * s8 * deltaSalida6);
+                            }
                         }
                     }
                 }
-            }
-            
-            //Ahora los pesos que llegan a la capa oculta.
-            for (int i = 0; i < pesosCapaOculta.Count; i++)
-            {
-                for (int j = 0; j < pesosCapaOculta.ElementAt(i).Count; j++)
+
+                //Ahora los pesos que llegan a la capa oculta.
+                for (int i = 0; i < pesosCapaOculta.Count; i++)
                 {
-                    if (j == 0)
+                    for (int j = 0; j < pesosCapaOculta.ElementAt(i).Count; j++)
                     {
-                        //Ajustamos y actualizamos los pesos que llegan a la primera neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso = 
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste * 
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta1);
-                    }
-                    else if (j == 1)
-                    {                        
-                        //Ajustamos y actualizamos los pesos que llegan a la segunda neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste * 
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta2);
-                    }
-                    else if (j == 2)
-                    {
-                        //Ajustamos y actualizamos los pesos que llegan a la tercera neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta3);
-                    }
-                    else if (j == 3)
-                    {
-                        //Ajustamos y actualizamos los pesos que llegan a la cuarta neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta4);
-                    }
-                    else if (j == 4)
-                    {
-                        //Ajustamos y actualizamos los pesos que llegan a la quinta neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta5);
-                    }
-                    else if (j == 5)
-                    {
-                        //Ajustamos y actualizamos los pesos que llega a la sexta neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta6);
-                    }
-                    else if (j == 6)
-                    {
-                        //Ajustamos y actualizamos los pesos que llega a la séptima neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta7);
-                    }
-                    else if (j == 7)
-                    {
-                        //Ajustamos y actualizamos los pesos que llega a la octava neurona de la capa oculta.
-                        this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
-                            pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
-                                datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta8);
+                        if (j == 0)
+                        {
+                            //Ajustamos y actualizamos los pesos que llegan a la primera neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta1);
+                        }
+                        else if (j == 1)
+                        {
+                            //Ajustamos y actualizamos los pesos que llegan a la segunda neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta2);
+                        }
+                        else if (j == 2)
+                        {
+                            //Ajustamos y actualizamos los pesos que llegan a la tercera neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta3);
+                        }
+                        else if (j == 3)
+                        {
+                            //Ajustamos y actualizamos los pesos que llegan a la cuarta neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta4);
+                        }
+                        else if (j == 4)
+                        {
+                            //Ajustamos y actualizamos los pesos que llegan a la quinta neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta5);
+                        }
+                        else if (j == 5)
+                        {
+                            //Ajustamos y actualizamos los pesos que llega a la sexta neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta6);
+                        }
+                        else if (j == 6)
+                        {
+                            //Ajustamos y actualizamos los pesos que llega a la séptima neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta7);
+                        }
+                        else if (j == 7)
+                        {
+                            //Ajustamos y actualizamos los pesos que llega a la octava neurona de la capa oculta.
+                            this.neuronas.ElementAt(i).neuronasDeIda.ElementAt(j).peso =
+                                pesosCapaOculta.ElementAt(i).ElementAt(j) + (valorAjuste *
+                                    datosEntrada.ElementAt(numeroEntrada).ElementAt(i) * deltaOculta8);
+                        }
                     }
                 }
             }

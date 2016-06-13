@@ -14,20 +14,22 @@ namespace NeuronalCR
     public partial class Form1 : Form
     {
         static Image<Bgr, byte> imagenSeleccionada;
+        Image<Bgr, byte> nuevaImagen;
         static Backpropagation backpropagation;
 
         SetupReNeuronal setup = new SetupReNeuronal();
 
         int divisor1 = 0;
-        String[] listaCaracteres = {"A", "B","C","D","E","F","G","H","I","J","K","L",
-                                    "M","N","O","P","Q","R","S","T","U","V","W","X",
-                                    "Y","Z",
-                                    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        String[] listaCaracteres = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ,
+                                        "A", "B","C","D","E","F","G","H","I","J","K","L",
+                                        "M","N","O","P","Q","R","S","T","U","V","W","X",
+                                        "Y","Z" };
 
         public Form1()
         {
             InitializeComponent();
             inicializar();
+            
         }
 
         private void btnCargarImagen_Click(object sender, EventArgs e)
@@ -116,7 +118,6 @@ namespace NeuronalCR
         public void inicializar()
         {
             backpropagation = new Backpropagation();
-            //createNeuralNetwork();
             setup.createNeuralNetwork(backpropagation);
             setup.createCharactersTable(backpropagation);
         }
@@ -125,31 +126,39 @@ namespace NeuronalCR
         {
             List<List<int>> matriz = obtenerMatriz(imagenSeleccionada);
             List<Letra> letras = obtenerLetras(matriz);
+            List<Image<Bgr, byte>> listImages = obtenerListaImagenes(letras);
 
-            double[] porcentajes = new double[36];
+            double[] porcentajes = new double[listaCaracteres.Length];
 
-            for (int i = 0; i < letras.Count; i++)
+            //backpropagation.catcha = true;
+            for (int i = 0; i < listImages.Count; i++)
             {
                 //Con esto actualizamos los datos de entrada para que concuerden con el caracter indicado por el usuario.
                 //ajustarPesos();
-                List<double> x = obtenerPatrónPorCuadros2(letras[i]);
 
-                for (int j = 0; j < listaCaracteres.Length; j++)
+                //imageBox.Image = listImages[i];
+                Image<Bgr, byte> item = listImages[i].Resize(600, 600, Emgu.CV.CvEnum.Inter.Linear);
+                List<double> x = obtenerPatronPorCuadros(item);
+
+
+                int j = 0;
+                while (j < listaCaracteres.Length)
                 {
-                    String characterToAnalyse = listaCaracteres[j].ToUpper();
-                    //inicializar();
-                    //ajustarPesos();
-
+                    String characterToAnalyse = listaCaracteres[j];
                     getEntryData(characterToAnalyse, x);//, true);
 
-                    // Analizamos la imagen elegida por el usuario.
+                    
                     int iteraciones = Int32.Parse(tbIteraciones.Text);
                     double percentaje = Math.Round(backpropagation.missionStart(backpropagation.getUserEntry(), iteraciones), 2);
-                    //labelPercent.Text = percentaje.ToString() + "%";
+                    string por = percentaje.ToString();
                     porcentajes[j] = percentaje;
+
+                    ///Console.WriteLine(j.ToString() + " - " + listaCaracteres[i] + " - " + por);
+                    j++;
                 }
+
                 imprimirLetra(porcentajes);
-                porcentajes = new double[36];
+                porcentajes = new double[listaCaracteres.Length];
             }
 
             //Console.WriteLine("Termine con exito, imagenes totales " + letras.Count);
@@ -545,6 +554,7 @@ namespace NeuronalCR
                         entryData.Add(0);
                     }
                 }
+                Console.WriteLine(x);
                 tbResultado.AppendText(x);
                 tbResultado.AppendText("\n");
             }
@@ -603,14 +613,44 @@ namespace NeuronalCR
             return letras;
         }
 
+        private List<Image<Bgr, byte>> obtenerListaImagenes(List<Letra> letras) {
+            List<Image<Bgr, byte>> imagenes = new List<Image<Bgr, byte>>();
+            
+            for (int k = 0; k < letras.Count; k++)
+            {
+                Bitmap bitmap = new Bitmap(letras[k].Matriz.Count, letras[k].Matriz[0].Count);
+                for (int i = 0; i < letras[k].Matriz.Count; i++)
+                {
+                    string x = "";
+                    for (int j = 0; j < letras[k].Matriz[i].Count; j++)
+                    {
+                        
+                        if (letras[k].Matriz[i][j] == 1)
+                        {
+                            x += "1";
+                            bitmap.SetPixel(i, j, Color.Black);
+                        }
+                        else {
+                            x += "0";
+                            bitmap.SetPixel(i, j, Color.White);
+                        }
+                    }
+                    //Console.WriteLine(x);
+                }
+                nuevaImagen = new Image<Bgr, byte>(bitmap);
+                imagenes.Add(nuevaImagen);
+            }
+            return imagenes;
+        }
+
         private Letra generarLetra(int divisor2, List<List<int>> matriz)
         {
             List<List<int>> matrizDeLetra = new List<List<int>>();
 
-            for (int col = divisor1; col < divisor2; col++)
+            for (int fil = divisor1; fil < divisor2; fil++)
             {
                 List<int> termpList = new List<int>();
-                for (int fil = 0; fil < 600; fil++)
+                for (int col = 0; col < 600; col++)
                 {
                     termpList.Add(matriz[col][fil]);
                 }
@@ -665,7 +705,7 @@ namespace NeuronalCR
         {
             List<double> entryData = new List<double>();
 
-            for (int i = 0; i < imagen.MatrizStr.Length; i++)
+            for (int i = 0; i < imagen.MatrizStr.Length; i ++)
             {
                 entryData.Add(int.Parse(imagen.MatrizStr.ElementAt(i).ToString()));
             }
@@ -685,7 +725,7 @@ namespace NeuronalCR
                     mayor = porcentajes[i];
                     pos = i;
                 }
-                //Console.WriteLine(listaCaracteres[i] + " - " + porcentajes[i]);
+                Console.WriteLine(listaCaracteres[i] + " - " + porcentajes[i]);
             }
             lblResultado.Text += listaCaracteres[pos];
         }
