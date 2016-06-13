@@ -11,11 +11,14 @@ using NeuronalCR.Lógica;
 
 namespace NeuronalCR
 {
+    /// <summary>
+    /// vista del programa
+    /// </summary>
     public partial class Form1 : Form
     {
-        static Image<Bgr, byte> imagenSeleccionada;
+        Image<Bgr, byte> imagenSeleccionada;
         Image<Bgr, byte> nuevaImagen;
-        static Backpropagation backpropagation;
+        Backpropagation backpropagation;
 
         SetupReNeuronal setup = new SetupReNeuronal();
 
@@ -32,6 +35,11 @@ namespace NeuronalCR
             
         }
 
+        /// <summary>
+        /// Boton para buscar la imagen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCargarImagen_Click(object sender, EventArgs e)
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -53,6 +61,11 @@ namespace NeuronalCR
             }
         }
 
+        /// <summary>
+        /// Boton para aplicar el filtro
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFiltro_Click(object sender, EventArgs e)
         {
             if (imagenSeleccionada != null)
@@ -70,6 +83,11 @@ namespace NeuronalCR
                 lblResultado.Text = "Cargar una imagen primero";
         }
 
+        /// <summary>
+        /// Boton para iniciarlizar los datos de la aplicacion
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnInicializar_Click(object sender, EventArgs e)
         {
             inicializar();
@@ -77,6 +95,11 @@ namespace NeuronalCR
             lblResultado.Text = "Se inicializó la aplicación";
         }
 
+        /// <summary>
+        /// Boton para realizar el ajuste de los pesos de la red
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAjustarPesos_Click(object sender, EventArgs e)
         {
             try
@@ -90,31 +113,48 @@ namespace NeuronalCR
             }
         }
 
+        /// <summary>
+        /// Metodo para calcular los pesos
+        /// </summary>
         public void ajustarPesos()
         {
             List<List<double>> entryData = new List<List<double>>(backpropagation.getEntries());
             analyseData(entryData);
         }
 
+        /// <summary>
+        /// Boton para analizar la una imagen con un solo caracter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnRedNeuronal_Click(object sender, EventArgs e)
         {
             try
             {
                 //Con esto actualizamos los datos de entrada para que concuerden con el caracter indicado por el usuario.
+
+                //List<List<int>> matriz = obtenerMatriz(imagenSeleccionada);
+                //Letra letra = obtenerLetra(matriz);
+                //Image<Bgr, byte> listImages = obtenerListaImagenes(letra);
+
                 String characterToAnalyse = tbCaracter.Text.ToUpper();
                 getEntryData(characterToAnalyse, obtenerPatronPorCuadros(imagenSeleccionada));
 
                 // Analizamos la imagen elegida por el usuario.
                 int iteraciones = Int32.Parse(tbIteraciones.Text);
-                double percentaje = Math.Round(backpropagation.missionStart(backpropagation.getUserEntry(), iteraciones), 2);
+                double percentaje = Math.Round(backpropagation.iniciarAnalisis(backpropagation.getUserEntry(), iteraciones, true), 2);
                 lblResultado.Text = percentaje.ToString() + "% de similitud, con: " + tbCaracter.Text;
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                lblResultado.Text = "Ocurrió un error en el análisis";
+                //lblResultado.Text = "Ocurrió un error en el análisis";
+                Console.WriteLine(ex.Message.ToString());
             }
         }
 
+        /// <summary>
+        /// Metodo para inicializar los datos de la aplicacion
+        /// </summary>
         public void inicializar()
         {
             backpropagation = new Backpropagation();
@@ -122,6 +162,11 @@ namespace NeuronalCR
             setup.createCharactersTable(backpropagation);
         }
 
+        /// <summary>
+        /// Boton para analizar una imagen con mas de un caracter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAnalisisCaracteres_Click(object sender, EventArgs e)
         {
             List<List<int>> matriz = obtenerMatriz(imagenSeleccionada);
@@ -149,31 +194,39 @@ namespace NeuronalCR
 
                     
                     int iteraciones = Int32.Parse(tbIteraciones.Text);
-                    double percentaje = Math.Round(backpropagation.missionStart(backpropagation.getUserEntry(), iteraciones), 2);
+                    double percentaje = Math.Round(backpropagation.iniciarAnalisis(backpropagation.getUserEntry(), iteraciones, false), 2);
                     string por = percentaje.ToString();
                     porcentajes[j] = percentaje;
 
+                    //inicializar();
+                    //ajustarPesos();
                     ///Console.WriteLine(j.ToString() + " - " + listaCaracteres[i] + " - " + por);
                     j++;
                 }
-
                 imprimirLetra(porcentajes);
                 porcentajes = new double[listaCaracteres.Length];
+                
             }
 
             //Console.WriteLine("Termine con exito, imagenes totales " + letras.Count);
         }
-
-        // This method is used to analyse and adjust the neural network using the full characters table.
+        
+        /// <summary>
+        /// Metodo que se usa para analizar y ajustar la red neuronal usando toda la tabla de caracteres
+        /// </summary>
+        /// <param name="entryData">tabla de caracteres</param>
         public void analyseData(List<List<double>> entryData)
         {
             int iterations = Int32.Parse(tbIteraciones.Text);
-            backpropagation.missionStart(entryData, iterations);
+            backpropagation.iniciarAnalisis(entryData, iterations, true);
         }
-
-        // This method receives the character to analyse (character) 
-        // and the list of doubles that's obtained from the checkbox matrix or image (entryData).
-        // and returns a matrix with the data necesary to analyse the character.
+        
+        /// <summary>
+        /// Metodo que toma los datos de entrada
+        /// </summary>
+        /// <param name="character">Es el caracter por analizar</param>
+        /// <param name="entryData">Es la matriz de de la imagen</param>
+        /// <returns>Matriz con los datos necesarios para analizar el caracter</returns>
         public List<List<double>> getEntryData(String character, List<double> entryData)
         {
             List<Patron> Lp = new List<Patron>(); //Lista de patrones.            
@@ -519,9 +572,13 @@ namespace NeuronalCR
             }
             return backpropagation.getEntries();
         }
-
-        // Toma una imagen de 600 x 600 pixeles y analiza sus 36 cuadros (Cada cuadro son 1000 pixeles)
-        // En total analiza 36 mil pixeles
+        
+        /// <summary>
+        /// Toma una imagen de 600 x 600 pixeles y analiza sus 36 cuadros (Cada cuadro son 1000 pixeles)
+        /// En total analiza 36 mil pixeles
+        /// </summary>
+        /// <param name="imagen">imagen por analiozar</param>
+        /// <returns>Patron de la imagen por analizar</returns>
         private List<double> obtenerPatronPorCuadros(Image<Bgr, byte> imagen)
         {
             int ancho = imagen.Width;
@@ -561,8 +618,12 @@ namespace NeuronalCR
 
             return entryData;
         }
-
-        // Convierte la imagen en unos y ceros por pixel.
+        
+        /// <summary>
+        /// Convierte la imagen en unos y ceros por pixel.
+        /// </summary>
+        /// <param name="imagen">imagen a convertir en 1 y 0</param>
+        /// <returns>un string con 0 y 1 que representan los colores de la iamgen</returns>
         private String obtenerPatrónPorPixeles(Image<Bgr, byte> imagen)
         {
             String respuesta = "";
@@ -588,13 +649,24 @@ namespace NeuronalCR
             }
             return respuesta;
         }
-
-        // This method returns the color of a specific spot on the image given.
+        
+        /// <summary>
+        /// obtinene el color del pixel de la imagen en la posicion deseado
+        /// </summary>
+        /// <param name="imagen">imagen seleccionada</param>
+        /// <param name="x">eje x</param>
+        /// <param name="y">eje y</param>
+        /// <returns>Color del pixel</returns>
         private Color obtenerPixel(Image<Bgr, byte> imagen, int x, int y)
         {
             return imagen.Bitmap.GetPixel(x, y);
         }
 
+        /// <summary>
+        /// Obtiene la lista de caracteres de la imagen por analizar
+        /// </summary>
+        /// <param name="matriz">matriz de imagen</param>
+        /// <returns>lista de letras</returns>
         private List<Letra> obtenerLetras(List<List<int>> matriz)
         {
             List<Letra> letras = new List<Letra>();
@@ -613,6 +685,34 @@ namespace NeuronalCR
             return letras;
         }
 
+        /// <summary>
+        /// obtener la letra de la matriz
+        /// </summary>
+        /// <param name="matriz">matriz de la imagen</param>
+        /// <returns>letra</returns>
+        private Letra obtenerLetra(List<List<int>> matriz)
+        {
+            Letra letras = null;
+            // Falso dentro del patron de la letra
+            // True en un espacio en blanco
+            bool wc = true;
+            for (int columna = 0; columna < matriz[0].Count; columna++)
+            {
+                bool tempFlag = verificarVacio(columna, matriz);
+                if (!wc && tempFlag)
+                {
+                    letras = generarLetra(columna, matriz);
+                }
+                wc = tempFlag;
+            }
+            return letras;
+        }
+
+        /// <summary>
+        /// obtine la lista de imagenes (caracteres de una imagen)
+        /// </summary>
+        /// <param name="letras">lista de letras</param>
+        /// <returns>lista con las imagenes por analizar</returns>
         private List<Image<Bgr, byte>> obtenerListaImagenes(List<Letra> letras) {
             List<Image<Bgr, byte>> imagenes = new List<Image<Bgr, byte>>();
             
@@ -643,6 +743,43 @@ namespace NeuronalCR
             return imagenes;
         }
 
+        /// <summary>
+        /// obtiene la imagen de una letra
+        /// </summary>
+        /// <param name="letras">letra para obtener imagen</param>
+        /// <returns>imagen de la letra</returns>
+        private Image<Bgr, byte> obtenerListaImagenes(Letra letras)
+        {
+
+            Bitmap bitmap = new Bitmap(letras.Matriz.Count, letras.Matriz[0].Count);
+            for (int i = 0; i < letras.Matriz.Count; i++)
+            {
+                string x = "";
+                for (int j = 0; j < letras.Matriz[i].Count; j++)
+                {
+
+                    if (letras.Matriz[i][j] == 1)
+                    {
+                        x += "1";
+                        bitmap.SetPixel(i, j, Color.Black);
+                    }
+                    else {
+                        x += "0";
+                        bitmap.SetPixel(i, j, Color.White);
+                    }
+                }
+                //Console.WriteLine(x);
+            }
+
+            return new Image<Bgr, byte>(bitmap); ;
+        }
+
+        /// <summary>
+        /// genera la letra de la amtriz de una imagen
+        /// </summary>
+        /// <param name="divisor2">hasta donde cortar la imagen</param>
+        /// <param name="matriz">matriz de imagen</param>
+        /// <returns></returns>
         private Letra generarLetra(int divisor2, List<List<int>> matriz)
         {
             List<List<int>> matrizDeLetra = new List<List<int>>();
@@ -661,6 +798,12 @@ namespace NeuronalCR
             return letra;
         }
 
+        /// <summary>
+        /// verifica que una columna esta con datos vacios (0)
+        /// </summary>
+        /// <param name="columna">columna a verificar</param>
+        /// <param name="matriz">matriz de imagen</param>
+        /// <returns>true si es vacia y false si no lo es</returns>
         private bool verificarVacio(int columna, List<List<int>> matriz)
         {
             for (int fila = 0; fila < matriz.Count; fila++)
@@ -673,6 +816,11 @@ namespace NeuronalCR
             return true;
         }
         
+        /// <summary>
+        /// obtine la matriz de la imagen a analizar
+        /// </summary>
+        /// <param name="imagen">imagen a analizar</param>
+        /// <returns>matriz de imagen</returns>
         private List<List<int>> obtenerMatriz(Image<Bgr, byte> imagen)
         {
             List<List<int>> matriz = new List<List<int>>();
@@ -701,18 +849,10 @@ namespace NeuronalCR
             return matriz;
         }
 
-        private List<double> obtenerPatrónPorCuadros2(Letra imagen)
-        {
-            List<double> entryData = new List<double>();
-
-            for (int i = 0; i < imagen.MatrizStr.Length; i ++)
-            {
-                entryData.Add(int.Parse(imagen.MatrizStr.ElementAt(i).ToString()));
-            }
-
-            return entryData;
-        }
-
+        /// <summary>
+        /// imprime el porocentaje de las letras
+        /// </summary>
+        /// <param name="porcentajes">porcentajes</param>
         private void imprimirLetra(double[] porcentajes)
         {
             double mayor = 0.0;

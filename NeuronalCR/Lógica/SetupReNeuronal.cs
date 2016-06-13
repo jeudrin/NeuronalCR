@@ -8,9 +8,15 @@ using NeuronalCR.Class;
 
 namespace NeuronalCR.Lógica
 {
+    /// <summary>
+    /// Clase que hace setup a los patrones de la red y a la red misma
+    /// </summary>
     class SetupReNeuronal
     {
-        //This method is used for creating the neural network
+        /// <summary>
+        /// crea la red neuronal
+        /// </summary>
+        /// <param name="backpropagation">instancia de la clase de backpropagation</param>
         public void createNeuralNetwork(Backpropagation backpropagation)
         {
             // Tabla de Neuronas de la red neuronal
@@ -2146,7 +2152,10 @@ namespace NeuronalCR.Lógica
 
         }
 
-        //This method creates the characters table that can be received by the application.
+        /// <summary>
+        /// crea la tabla de caracteres 
+        /// </summary>
+        /// <param name="backpropagation">instancia de la clase de backpropagation</param>
         public void createCharactersTable(Backpropagation backpropagation)
         {
             //backpropagation = new Retropropagación();

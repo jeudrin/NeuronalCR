@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace NeuronalCR.Class
 {
+    /// <summary>
+    /// Clase para el algoritmo backpropagation
+    /// </summary>
     public class Backpropagation
     {
         public int límiteIteraciones { set; get; }
@@ -13,7 +16,10 @@ namespace NeuronalCR.Class
 
         public bool catcha = false;
         
-        //Método que se encarga de obtener los datos de entrada hacia la red neuronal.
+        /// <summary>
+        /// Método que se encarga de obtener los datos de entrada hacia la red neuronal.
+        /// </summary>
+        /// <returns>datos de entrada de la red neuronal</returns>
         public List<List<double>> getEntries()
         {
             //Columnas de la tabla de entrada de datos.
@@ -1948,8 +1954,12 @@ namespace NeuronalCR.Class
             
             return entries;
         }
-        
-        //Usamos este método al analizar el caracter elegido por el usuario.
+
+
+        /// <summary>
+        ///Usamos este método al analizar el caracter elegido por el usuario. 
+        /// </summary>
+        /// <returns>matris producto del analisis del caracter del usuario</returns>
         public List<List<double>> getUserEntry()
         {
             //Columnas de la tabla de entrada de datos.
@@ -2239,7 +2249,11 @@ namespace NeuronalCR.Class
             return entries;
         }
 
-        //Recorremos la red neuronal para obtener la matriz de valores de la capa oculta.
+
+        /// <summary>
+        ///Recorremos la red neuronal para obtener la matriz de valores de la capa oculta.
+        /// </summary>
+        /// <returns>capa oculta de la red</returns>
         public List<List<double>> getCapaOculta()
         {
             List<List<double>> capaOculta = new List<List<double>>();
@@ -2255,8 +2269,11 @@ namespace NeuronalCR.Class
             }            
             return capaOculta;
         }
-
-        //Recorremos la red neuronal para obtener la matriz de valores de la capa de salida.
+        
+        /// <summary>
+        /// Recorremos la red neuronal para obtener la matriz de valores de la capa de salida.
+        /// </summary>
+        /// <returns>capa de salida de la red</returns>
         public List<List<double>> getCapaSalida()
         {
             List<List<double>> capaSalida = new List<List<double>>();
@@ -2273,9 +2290,15 @@ namespace NeuronalCR.Class
             }            
             return capaSalida;
         }
-                                     
-        //Método principal que se encargará de realizar las iteraciones y ajustes de pesos si fuera necesario.
-        public double missionStart(List<List<double>> datosEntrada, int iteraciones)
+        
+        /// <summary>
+        /// Método principal que se encargará de realizar las iteraciones y ajustes de pesos si fuera necesario.
+        /// </summary>
+        /// <param name="datosEntrada">matriz de entrada</param>
+        /// <param name="iteraciones">nnumero de interaciones</param>
+        /// <param name="flag">bandera de control</param>
+        /// <returns>retorna el valor del analisis</returns>
+        public double iniciarAnalisis(List<List<double>> datosEntrada, int iteraciones, bool flag)
         {
             int t = 36;
             //string whatsWrong = "";
@@ -2338,7 +2361,7 @@ namespace NeuronalCR.Class
                                 porcentajeSimilitud -= salida;
                                 //whatsWrong += "No hace falta ajustar: " + salida.ToString() + "                                             ";
                             }
-                            else
+                            else if(flag)
                             {
                                 //Hay que ajustar porque se necesita una salida más baja.
                                 pesosPerfectos = 0;
@@ -2371,8 +2394,15 @@ namespace NeuronalCR.Class
             porcentajeSimilitud = ((porcentajeSimilitud / dividendo) * 100);
             return porcentajeSimilitud;
         }
-        
-        //Obtenemos las salidas de todas las neuronas
+
+        /// <summary>
+        /// Obtenemos las salidas de todas las neuronas
+        /// </summary>
+        /// <param name="datosEntrada">matriz de entrada</param>
+        /// <param name="pesosCapaOculta"pesos de la capa oculta></param>
+        /// <param name="pesosCapaSalida">pesos de la capa salida</param>
+        /// <param name="numeroEntrada">numero de entrada</param>
+        /// <returns>lista de salidas</returns>
         public List<double> getSalidas(List<List<double>> datosEntrada, List<List<double>> pesosCapaOculta,
             List<List<double>> pesosCapaSalida, int numeroEntrada)
         {
@@ -2694,7 +2724,14 @@ namespace NeuronalCR.Class
             return salidas;
         }
 
-        //Método para ajustar los pesos
+        /// <summary>
+        /// Método para ajustar los pesos
+        /// </summary>
+        /// <param name="numeroEntrada">numero de entrada</param>
+        /// <param name="datosEntrada">matriz de entrada</param>
+        /// <param name="pesosCapaOculta"pesos de la capa oculta></param>
+        /// <param name="pesosCapaSalida">pesos de la capa salida</param>
+        /// <param name="valorAjuste">valor de ajuste</param>
         public void ajuste(int numeroEntrada, List<List<double>> datosEntrada, List<List<double>> pesosCapaOculta, 
             List<List<double>> pesosCapaSalida, double valorAjuste)
         {
