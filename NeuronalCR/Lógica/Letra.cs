@@ -48,7 +48,7 @@ namespace NeuronalCR.Lógica
             return matriz;
         }
 
-        public double ajuste(string name, double porcentaje, string v, int i)
+        public double letraP(string name, double porcentaje, string v, int i)
         {
             if (name.Equals("2010.png"))
             {

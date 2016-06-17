@@ -189,8 +189,7 @@ namespace NeuronalCR
                     getEntryData(characterToAnalyse, x);
                     int iteraciones = Int32.Parse(tbIteraciones.Text);
                     double porcentaje = Math.Round(backpropagation.iniciarAnalisis(backpropagation.getUserEntry(), iteraciones, false), 2);
-                    porcentajes[j] = l.ajuste(name,porcentaje, listaCaracteres[j], i);
-                    //porcentajes[j] = porcentaje;
+                    porcentajes[j] = letras[i].letraP(name,porcentaje, listaCaracteres[j], i);
                     j++;
                 }
                 imprimirLetra(porcentajes);
