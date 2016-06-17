@@ -2023,7 +2023,7 @@ namespace NeuronalCR.Class
                     {
                         if (k == 36)
                         {
-                            c37.Add(patrones.ElementAt(j).salidas.ElementAt(k - 36).valorItem); //j y k van al reves creo.
+                            c37.Add(patrones.ElementAt(j).salidas.ElementAt(k - 36).valorItem);
                         }
                         else if (k == 37)
                         {

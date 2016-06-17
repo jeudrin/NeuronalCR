@@ -133,11 +133,6 @@ namespace NeuronalCR
             try
             {
                 //Con esto actualizamos los datos de entrada para que concuerden con el caracter indicado por el usuario.
-
-                //List<List<int>> matriz = obtenerMatriz(imagenSeleccionada);
-                //Letra letra = obtenerLetra(matriz);
-                //Image<Bgr, byte> listImages = obtenerListaImagenes(letra);
-
                 String characterToAnalyse = tbCaracter.Text.ToUpper();
                 getEntryData(characterToAnalyse, obtenerPatronPorCuadros(imagenSeleccionada));
 
@@ -193,7 +188,6 @@ namespace NeuronalCR
                     String characterToAnalyse = listaCaracteres[j];
                     getEntryData(characterToAnalyse, x);
                     int iteraciones = Int32.Parse(tbIteraciones.Text);
-                    backpropagation.l = listaCaracteres[j];
                     double porcentaje = Math.Round(backpropagation.iniciarAnalisis(backpropagation.getUserEntry(), iteraciones, false), 2);
                     porcentajes[j] = l.ajuste(name,porcentaje, listaCaracteres[j], i);
                     //porcentajes[j] = porcentaje;
@@ -558,7 +552,6 @@ namespace NeuronalCR
             Lp.Add(entryCharacter);
             if (backpropagation == null)
             {
-                //createNeuralNetwork();
                 setup.createNeuralNetwork(backpropagation);
                 backpropagation.patrones = new List<Patron>(Lp);
             }
