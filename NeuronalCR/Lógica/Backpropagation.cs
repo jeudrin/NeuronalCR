@@ -10,7 +10,9 @@ namespace NeuronalCR.Class
     public class Backpropagation
     {
         public int límiteIteraciones { set; get; }
+        public string l;
         public double tasaDeAprendizaje { set; get; }
+        public string ni;
         public List<Patron> patrones;
         public List<Neurona> neuronas;
 
@@ -2724,6 +2726,7 @@ namespace NeuronalCR.Class
             return salidas;
         }
 
+
         /// <summary>
         /// Método para ajustar los pesos
         /// </summary>
@@ -3161,5 +3164,6 @@ namespace NeuronalCR.Class
                 }
             }
         }
+        
     }
 }

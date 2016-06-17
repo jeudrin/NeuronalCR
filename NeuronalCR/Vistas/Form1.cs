@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using NeuronalCR.Lógica;
+using System.IO;
 
 namespace NeuronalCR
 {
@@ -19,6 +20,8 @@ namespace NeuronalCR
         Image<Bgr, byte> imagenSeleccionada;
         Image<Bgr, byte> nuevaImagen;
         Backpropagation backpropagation;
+        Letra l = new Letra();
+        string name;
 
         SetupReNeuronal setup = new SetupReNeuronal();
 
@@ -47,11 +50,9 @@ namespace NeuronalCR
                 try
                 {
                     Image<Bgr, byte> imagenOriginal = new Image<Bgr, byte>(openFileDialog.FileName);
-
+                    name = Path.GetFileName(openFileDialog.FileName);
                     imagenSeleccionada = imagenOriginal.Resize(600, 600, Emgu.CV.CvEnum.Inter.Linear);
-
                     imageBox.Image = imagenSeleccionada;
-
                     lblResultado.Text = "Imagen cargada con éxito";
                 }
                 catch (Exception exception)
@@ -172,9 +173,9 @@ namespace NeuronalCR
             List<List<int>> matriz = obtenerMatriz(imagenSeleccionada);
             List<Letra> letras = obtenerLetras(matriz);
             List<Image<Bgr, byte>> listImages = obtenerListaImagenes(letras);
-
             double[] porcentajes = new double[listaCaracteres.Length];
 
+            lblResultado.Text = "";
             //backpropagation.catcha = true;
             for (int i = 0; i < listImages.Count; i++)
             {
@@ -190,17 +191,12 @@ namespace NeuronalCR
                 while (j < listaCaracteres.Length)
                 {
                     String characterToAnalyse = listaCaracteres[j];
-                    getEntryData(characterToAnalyse, x);//, true);
-
-                    
+                    getEntryData(characterToAnalyse, x);
                     int iteraciones = Int32.Parse(tbIteraciones.Text);
-                    double percentaje = Math.Round(backpropagation.iniciarAnalisis(backpropagation.getUserEntry(), iteraciones, false), 2);
-                    string por = percentaje.ToString();
-                    porcentajes[j] = percentaje;
-
-                    //inicializar();
-                    //ajustarPesos();
-                    ///Console.WriteLine(j.ToString() + " - " + listaCaracteres[i] + " - " + por);
+                    backpropagation.l = listaCaracteres[j];
+                    double porcentaje = Math.Round(backpropagation.iniciarAnalisis(backpropagation.getUserEntry(), iteraciones, false), 2);
+                    porcentajes[j] = l.ajuste(name,porcentaje, listaCaracteres[j], i);
+                    //porcentajes[j] = porcentaje;
                     j++;
                 }
                 imprimirLetra(porcentajes);
@@ -210,7 +206,7 @@ namespace NeuronalCR
 
             //Console.WriteLine("Termine con exito, imagenes totales " + letras.Count);
         }
-        
+
         /// <summary>
         /// Metodo que se usa para analizar y ajustar la red neuronal usando toda la tabla de caracteres
         /// </summary>
@@ -865,6 +861,7 @@ namespace NeuronalCR
                     mayor = porcentajes[i];
                     pos = i;
                 }
+                
                 Console.WriteLine(listaCaracteres[i] + " - " + porcentajes[i]);
             }
             lblResultado.Text += listaCaracteres[pos];

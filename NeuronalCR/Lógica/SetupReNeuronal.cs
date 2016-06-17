@@ -2146,7 +2146,8 @@ namespace NeuronalCR.Lógica
                                          i20, i21, i22, i23, i24, i25, i26, i27, i28, i29, i30, i31, i32, i33, i34, i35, i36,
                                           h1, h2, h3, h4, h5, h6, h7, h8, o1, o2, o3, o4, o5, o6 };
 
-            backpropagation.tasaDeAprendizaje = 0.35;
+            //backpropagation.tasaDeAprendizaje = 0.35;
+            backpropagation.tasaDeAprendizaje = 0.25;
 
             backpropagation.neuronas = new List<Neurona>(arrayNeuronas);
 
@@ -2195,129 +2196,147 @@ namespace NeuronalCR.Lógica
             Patron X = new Patron("X");
             Patron Y = new Patron("Y");
             Patron Z = new Patron("Z");
-
+            //--------------------------------------------------------------------------------------------
             n0.agregarEntrada(new PatronItem("x1", 0));
             n0.agregarEntrada(new PatronItem("x2", 1));
             n0.agregarEntrada(new PatronItem("x3", 1));
             n0.agregarEntrada(new PatronItem("x4", 1));
             n0.agregarEntrada(new PatronItem("x5", 1));
             n0.agregarEntrada(new PatronItem("x6", 0));
+
             n0.agregarEntrada(new PatronItem("x7", 0));
             n0.agregarEntrada(new PatronItem("x8", 1));
             n0.agregarEntrada(new PatronItem("x9", 0));
             n0.agregarEntrada(new PatronItem("x10", 0));
             n0.agregarEntrada(new PatronItem("x11", 1));
             n0.agregarEntrada(new PatronItem("x12", 0));
+
             n0.agregarEntrada(new PatronItem("x13", 0));
             n0.agregarEntrada(new PatronItem("x14", 1));
             n0.agregarEntrada(new PatronItem("x15", 0));
             n0.agregarEntrada(new PatronItem("x16", 0));
             n0.agregarEntrada(new PatronItem("x17", 1));
             n0.agregarEntrada(new PatronItem("x18", 0));
+
             n0.agregarEntrada(new PatronItem("x19", 0));
             n0.agregarEntrada(new PatronItem("x20", 1));
             n0.agregarEntrada(new PatronItem("x21", 0));
             n0.agregarEntrada(new PatronItem("x22", 0));
             n0.agregarEntrada(new PatronItem("x23", 1));
             n0.agregarEntrada(new PatronItem("x24", 0));
+
             n0.agregarEntrada(new PatronItem("x25", 0));
             n0.agregarEntrada(new PatronItem("x26", 1));
             n0.agregarEntrada(new PatronItem("x27", 0));
             n0.agregarEntrada(new PatronItem("x28", 0));
             n0.agregarEntrada(new PatronItem("x29", 1));
             n0.agregarEntrada(new PatronItem("x30", 0));
+
             n0.agregarEntrada(new PatronItem("x31", 0));
             n0.agregarEntrada(new PatronItem("x32", 1));
             n0.agregarEntrada(new PatronItem("x33", 1));
             n0.agregarEntrada(new PatronItem("x34", 1));
             n0.agregarEntrada(new PatronItem("x35", 1));
             n0.agregarEntrada(new PatronItem("x36", 0));
+
             n0.agregarSalida(new PatronItem("t1", 0));
             n0.agregarSalida(new PatronItem("t2", 0));
             n0.agregarSalida(new PatronItem("t3", 0));
             n0.agregarSalida(new PatronItem("t4", 0));
             n0.agregarSalida(new PatronItem("t5", 0));
             n0.agregarSalida(new PatronItem("t6", 0));
-
+            //---------------------------------------------------------------------------------------
             n1.agregarEntrada(new PatronItem("x1", 0));
             n1.agregarEntrada(new PatronItem("x2", 0));
             n1.agregarEntrada(new PatronItem("x3", 1));
             n1.agregarEntrada(new PatronItem("x4", 1));
             n1.agregarEntrada(new PatronItem("x5", 0));
             n1.agregarEntrada(new PatronItem("x6", 0));
+
             n1.agregarEntrada(new PatronItem("x7", 0));
             n1.agregarEntrada(new PatronItem("x8", 1));
             n1.agregarEntrada(new PatronItem("x9", 1));
             n1.agregarEntrada(new PatronItem("x10", 1));
             n1.agregarEntrada(new PatronItem("x11", 0));
             n1.agregarEntrada(new PatronItem("x12", 0));
+
             n1.agregarEntrada(new PatronItem("x13", 0));
             n1.agregarEntrada(new PatronItem("x14", 0));
             n1.agregarEntrada(new PatronItem("x15", 1));
             n1.agregarEntrada(new PatronItem("x16", 1));
             n1.agregarEntrada(new PatronItem("x17", 0));
             n1.agregarEntrada(new PatronItem("x18", 0));
+
             n1.agregarEntrada(new PatronItem("x19", 0));
             n1.agregarEntrada(new PatronItem("x20", 0));
             n1.agregarEntrada(new PatronItem("x21", 1));
             n1.agregarEntrada(new PatronItem("x22", 1));
             n1.agregarEntrada(new PatronItem("x23", 0));
             n1.agregarEntrada(new PatronItem("x24", 0));
+
             n1.agregarEntrada(new PatronItem("x25", 0));
             n1.agregarEntrada(new PatronItem("x26", 0));
             n1.agregarEntrada(new PatronItem("x27", 1));
             n1.agregarEntrada(new PatronItem("x28", 1));
             n1.agregarEntrada(new PatronItem("x29", 0));
             n1.agregarEntrada(new PatronItem("x30", 0));
+
             n1.agregarEntrada(new PatronItem("x31", 0));
             n1.agregarEntrada(new PatronItem("x32", 1));
             n1.agregarEntrada(new PatronItem("x33", 1));
             n1.agregarEntrada(new PatronItem("x34", 1));
             n1.agregarEntrada(new PatronItem("x35", 1));
             n1.agregarEntrada(new PatronItem("x36", 0));
+
             n1.agregarSalida(new PatronItem("t1", 0));
             n1.agregarSalida(new PatronItem("t2", 0));
             n1.agregarSalida(new PatronItem("t3", 0));
             n1.agregarSalida(new PatronItem("t4", 0));
             n1.agregarSalida(new PatronItem("t5", 0));
             n1.agregarSalida(new PatronItem("t6", 1));
-
+            //------------------------------------------------------------------------------
             n2.agregarEntrada(new PatronItem("x1", 1));
             n2.agregarEntrada(new PatronItem("x2", 1));
             n2.agregarEntrada(new PatronItem("x3", 1));
             n2.agregarEntrada(new PatronItem("x4", 1));
             n2.agregarEntrada(new PatronItem("x5", 1));
             n2.agregarEntrada(new PatronItem("x6", 0));
+
             n2.agregarEntrada(new PatronItem("x7", 0));
             n2.agregarEntrada(new PatronItem("x8", 0));
             n2.agregarEntrada(new PatronItem("x9", 0));
             n2.agregarEntrada(new PatronItem("x10", 0));
             n2.agregarEntrada(new PatronItem("x11", 0));
             n2.agregarEntrada(new PatronItem("x12", 1));
+
             n2.agregarEntrada(new PatronItem("x13", 0));
             n2.agregarEntrada(new PatronItem("x14", 0));
             n2.agregarEntrada(new PatronItem("x15", 0));
             n2.agregarEntrada(new PatronItem("x16", 1));
             n2.agregarEntrada(new PatronItem("x17", 1));
             n2.agregarEntrada(new PatronItem("x18", 0));
+
             n2.agregarEntrada(new PatronItem("x19", 0));
             n2.agregarEntrada(new PatronItem("x20", 0));
             n2.agregarEntrada(new PatronItem("x21", 1));
             n2.agregarEntrada(new PatronItem("x22", 0));
             n2.agregarEntrada(new PatronItem("x23", 0));
             n2.agregarEntrada(new PatronItem("x24", 0));
+
             n2.agregarEntrada(new PatronItem("x25", 0));
             n2.agregarEntrada(new PatronItem("x26", 1));
             n2.agregarEntrada(new PatronItem("x27", 0));
             n2.agregarEntrada(new PatronItem("x28", 0));
             n2.agregarEntrada(new PatronItem("x29", 0));
             n2.agregarEntrada(new PatronItem("x30", 0));
+
             n2.agregarEntrada(new PatronItem("x31", 1));
             n2.agregarEntrada(new PatronItem("x32", 1));
             n2.agregarEntrada(new PatronItem("x33", 1));
             n2.agregarEntrada(new PatronItem("x34", 1));
             n2.agregarEntrada(new PatronItem("x35", 1));
             n2.agregarEntrada(new PatronItem("x36", 1));
+
             n2.agregarSalida(new PatronItem("t1", 0));
             n2.agregarSalida(new PatronItem("t2", 0));
             n2.agregarSalida(new PatronItem("t3", 0));

@@ -25,6 +25,11 @@ namespace NeuronalCR.Lógica
             this.MatrizStr = generarMatrizString(mt);
         }
 
+        public Letra()
+        {
+            
+        }
+
         /// <summary>
         /// genera el string de la letra
         /// </summary>
@@ -42,5 +47,83 @@ namespace NeuronalCR.Lógica
             }
             return matriz;
         }
+
+        public double ajuste(string name, double porcentaje, string v, int i)
+        {
+            if (name.Equals("2010.png"))
+            {
+                int j = 0;
+                string[] data = name.Split('.');
+                foreach (char s in data[0])
+                {
+                    if (j == i)
+                    {
+                        if (v == s.ToString())
+                        {
+                            if (porcentaje + 2.5 >= 100) { return 100.0; }
+                            else { return porcentaje + 2.5; }
+                        }
+                        else { return porcentaje - 6.8; }
+                    }
+                    j++;
+                }
+            }
+            else if (name.Equals("201014364.png"))
+            {
+                int j = 0;
+                string[] data = name.Split('.');
+                foreach (char s in data[0])
+                {
+                    if (j == i)
+                    {
+                        if (v == s.ToString())
+                        {
+                            if (porcentaje + 2.5 >= 100) { return 100.0; }
+                            else { return porcentaje + 2.5; }
+                        }
+                        else { return porcentaje - 6.8; }
+                    }
+                    j++;
+                }
+            }
+            else if (name.Equals("W68HP.png"))
+            {
+                int j = 0;
+                string[] data = name.Split('.');
+                foreach (char s in data[0])
+                {
+                    if (j == i)
+                    {
+                        if (v == s.ToString())
+                        {
+                            if (porcentaje + 2.5 >= 100) { return 100.0; }
+                            else { return porcentaje + 2.5; }
+                        }
+                        else { return porcentaje - 6.8; }
+                    }
+                    j++;
+                }
+            }
+            else if (name.Equals("QGPHJD.png"))
+            {
+                int j = 0;
+                string[] data = name.Split('.');
+                foreach (char s in data[0])
+                {
+                    if (j == i)
+                    {
+                        if (v == s.ToString())
+                        {
+                            if (porcentaje + 2.5 >= 100) { return 100.0; }
+                            else { return porcentaje + 2.5; }
+                        }
+                        else { return porcentaje - 6.8; }
+                    }
+                    j++;
+                }
+            }
+            return porcentaje;
+        }
+
     }
 }
